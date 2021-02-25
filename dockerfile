@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=mcr.microsoft.com/dotnet/core/runtime:3.1
+ARG BASE_IMAGE=mcr.microsoft.com/dotnet/sdk:5.0
 FROM ${BASE_IMAGE}
 
 LABEL maintainer="cspeers"
