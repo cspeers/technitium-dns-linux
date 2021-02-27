@@ -7,7 +7,10 @@ ARG INSTALL_URL="https://download.technitium.com/dns/DnsServerPortable.tar.gz"
 ARG HEALTHCHECK_DNS="google.com"
 ENV CHECK_ADDRESS=${HEALTHCHECK_DNS}
 
-RUN apt-get -y update && apt-get -y install curl dnsutils
+RUN apt-get update && apt-get -qy install \
+  curl \
+  dnsutils \
+  net-tools
 
 RUN mkdir /tmp/install
 RUN mkdir /app
@@ -25,6 +28,7 @@ EXPOSE 53/tcp
 EXPOSE 53/udp
 EXPOSE 853/tcp
 EXPOSE 443/tcp
+EXPOSE 53443/tcp
 
 VOLUME ["/app/config"]
 VOLUME ["/certs"]
