@@ -1,17 +1,28 @@
-ARG BASE_IMAGE=mcr.microsoft.com/dotnet/sdk:5.0
+ARG BASE_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
 FROM ${BASE_IMAGE}
 
 LABEL maintainer="cspeers"
 ARG INSTALL_URL="https://download.technitium.com/dns/DnsServerPortable.tar.gz"
+ARG MS_PACKAGE_URL="https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb"
 
 ARG HEALTHCHECK_DNS="google.com"
 ENV CHECK_ADDRESS=${HEALTHCHECK_DNS}
 
 RUN apt-get update && apt-get -qy install \
   curl \
-  dnsutils \
-  net-tools
+  apt-transport-https
 
+
+# Add MS Repository
+ADD ${MS_PACKAGE_URL} packages-microsoft-prod.deb 
+RUN dpkg -i packages-microsoft-prod.deb
+
+RUN apt-get update && apt-get install -qy \
+  dnsutils \
+  net-tools \
+  libmsquic
+
+# Install the thing
 RUN mkdir /tmp/install
 RUN mkdir /app
 RUN mkdir /certs
